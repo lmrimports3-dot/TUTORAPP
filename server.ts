@@ -1,7 +1,13 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
+import apiRoutes from "./src/api/routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,16 +18,8 @@ async function startServer() {
 
   app.use(express.json());
 
-  // API Routes
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", message: "EduAI API is running" });
-  });
-
-  // Mock Auth API
-  app.post("/api/auth/login", (req, res) => {
-    const { email } = req.body;
-    res.json({ id: "1", email, name: email.split("@")[0] });
-  });
+  // API Routes from the new structure
+  app.use("/api", apiRoutes);
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
@@ -31,7 +29,6 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    // Serve static files in production
     app.use(express.static(path.join(__dirname, "dist")));
     app.get("*", (req, res) => {
       res.sendFile(path.join(__dirname, "dist", "index.html"));
