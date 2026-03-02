@@ -1,0 +1,5 @@
+{
+  "name": "EduAI MVP",
+  "description": "An educational platform featuring conversational AI tutors with persona-based learning experiences.",
+  "requestFramePermissions": ["microphone"]
+}
